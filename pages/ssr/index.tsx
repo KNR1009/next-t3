@@ -3,12 +3,14 @@ import type { GetServerSideProps, NextPage } from "next";
 import React from "react";
 
 type Post = {
-  userId: number;
   id: number;
   title: string;
   body: string;
+  created_at: string;
+  updated_at: string;
 };
 
+// クライアント側での処理
 const SSRPage: NextPage<{ posts: Post[] }> = (props) => {
   return (
     <>
@@ -25,20 +27,19 @@ const SSRPage: NextPage<{ posts: Post[] }> = (props) => {
 };
 export default SSRPage;
 
-// サーバサイドで実行する処理(getServerSideProps)を定義する
+// サーバー側での処理
 export const getServerSideProps: GetServerSideProps<{ posts: Post[] }> = async (
   context
 ) => {
-  console.log("getServerSideProps");
-  const res = await axios.get("https://jsonplaceholder.typicode.com/posts");
+  const res = await axios.get("http://127.0.0.1:3005/posts");
   const result = await res.data;
-
-  const posts: Post[] = result.map((i: any) => {
+  const posts: Post[] = result.map((i: Post) => {
     return {
-      userId: i.userId,
       id: i.id,
       title: i.title,
       body: i.body,
+      created_at: i.created_at,
+      updated_at: i.updated_at,
     };
   });
 
