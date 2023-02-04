@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { GetServerSideProps, NextPage } from "next";
+import Link from "next/link";
 import React from "react";
 
 type Post = {
@@ -14,6 +15,7 @@ type Post = {
 const SSRPage: NextPage<{ posts: Post[] }> = (props) => {
   return (
     <>
+      <Link href="/">home</Link>
       {props.posts &&
         props.posts.map((post) => (
           <div key={post.id}>
@@ -31,6 +33,7 @@ export default SSRPage;
 export const getServerSideProps: GetServerSideProps<{ posts: Post[] }> = async (
   context
 ) => {
+  console.log("SSR");
   const res = await axios.get("http://127.0.0.1:3005/posts");
   const result = await res.data;
   const posts: Post[] = result.map((i: Post) => {

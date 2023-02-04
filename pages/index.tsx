@@ -8,6 +8,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Link href="/ssr">ssr</Link>
+      <Link href="/sg">sg</Link>
     </div>
   );
 };
