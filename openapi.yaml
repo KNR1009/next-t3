@@ -1,0 +1,585 @@
+openapi: "3.0.3"
+
+info:
+  title: "sanpai-no-mikata"
+  description: "産廃のミカタAPIドキュメント"
+  version: "1.0.0"
+tags:
+  - name: "post"
+  - name: "user"
+  - name: "category"
+  - name: "activity-history"
+  - name: "unit-prices"
+  - name: "admin"
+servers:
+  - url: "http://localhost:3005/"
+
+paths:
+  /users:
+    get:
+      summary: "ログインユーザーの取得"
+      tags:
+        - user
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    post:
+      summary: "ユーザー新規作成"
+      tags:
+        - user
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_uid: { type: string, example: "1111" }
+                name: { type: string, example: "taro" }
+                email: { type: string, example: "taro@third-scope.com" }
+      responses:
+        "204":
+          description: No Content
+    patch:
+      summary: "ユーザー更新"
+      tags:
+        - user
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "204":
+          description: No Content
+    delete:
+      summary: "ユーザー削除"
+      tags:
+        - user
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "204":
+          description: No Content
+  "/posts":
+    get:
+      summary: "投稿一覧取得"
+      tags:
+        - post
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+  "/categories":
+    get:
+      summary: "カテゴリー一覧の取得"
+      tags:
+        - category
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      summary: "カテゴリーの新規作成"
+      tags:
+        - category
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string, example: "情報提供" }
+                icon: { type: string, example: "xxx-xxx-xxx" }
+                status: { type: string, example: "日時確定" }
+      responses:
+        "204":
+          description: No Content
+  /categories/{id}:
+    get:
+      summary: "カテゴリー詳細の取得"
+      tags:
+        - category
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+    patch:
+      summary: "カテゴリー更新"
+      tags:
+        - category
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string, example: "情報提供" }
+                icon: { type: string, example: "xxx-xxx-xxx" }
+                status: { type: string, example: "日時確定" }
+      responses:
+        "204":
+          description: No Content
+    delete:
+      summary: "カテゴリー削除"
+      tags:
+        - category
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "204":
+          description: No Content
+  /activity-histories:
+    get:
+      summary: "活動履歴一覧の取得"
+      tags:
+        - activity-history
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityHistory"
+    post:
+      summary: "活動履歴の新規作成"
+      tags:
+        - activity-history
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CreateActivityHistory"
+      responses:
+        "204":
+          description: No Content
+  /activity-histories/{id}:
+    get:
+      summary: "活動履歴の詳細取得"
+      tags:
+        - activity-history
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityHistory"
+    patch:
+      summary: "活動履歴の更新"
+      tags:
+        - activity-history
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CreateActivityHistory"
+      responses:
+        "204":
+          description: No Content
+    delete:
+      summary: "活動履歴の削除"
+      tags:
+        - activity-history
+      security:
+        - Bearer: []
+      responses:
+        "204":
+          description: No Content
+  /unit-prices:
+    get:
+      summary: "単価表の一覧取得"
+      tags:
+        - unit-prices
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UnitPrice"
+  /admin/activity-histories:
+    get:
+      summary: "活動履歴の一覧取得"
+      tags:
+        - admin
+      security:
+        - Bearer: []
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityHistory"
+  /admin/activity-histories/{id}:
+    patch:
+      summary: "活動履歴の更新"
+      tags:
+        - admin
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CreateActivityHistory"
+      responses:
+        "204":
+          description: No Content
+    delete:
+      summary: "活動履歴の削除"
+      tags:
+        - admin
+      security:
+        - Bearer: []
+      responses:
+        "204":
+          description: No Content
+  /admin/unit-price:
+    post:
+      summary: "単価表の新規作成"
+      tags:
+        - admin
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/UnitPrice"
+      responses:
+        "204":
+          description: No Content
+  /admin/unit-price/{id}:
+    patch:
+      summary: "単価表の更新"
+      tags:
+        - admin
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/UnitPrice"
+      responses:
+        "204":
+          description: No Content
+    delete:
+      summary: "単価表の削除"
+      tags:
+        - admin
+      security:
+        - Bearer: []
+      responses:
+        "204":
+          description: No Content
+
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: APIにauth0の認証トークンを送ります。
+  schemas:
+    User:
+      title: ユーザー
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        auth_uid:
+          type: string
+          example: "1111"
+        name:
+          type: string
+          example: 鈴木太郎
+        kana:
+          type: string
+          example: suzukitaro
+        email:
+          type: string
+          example: taro@com.jp
+        company:
+          type: string
+          example: "株式会社テスト"
+        post:
+          type: string
+          example: "営業"
+        postal_code:
+          type: integer
+          example: 123-4567
+        prefecture:
+          type: integer
+          example: 1
+        municipalities:
+          type: string
+          example: 渋谷区
+        building:
+          type: string
+          example: 渋谷ビル
+        financial_institutions:
+          type: string
+          example: ゆうちょ銀行
+        branch:
+          type: string
+          example: 渋谷支店
+        classification:
+          type: string
+          example: 種別
+        account_number:
+          type: integer
+          example: 12345
+        account_name:
+          type: string
+          example: タナカタロウ
+    Category:
+      title: カテゴリー
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 情報提供
+        icon:
+          type: string
+          example: xxx-xxx-xxx
+        status:
+          type: string
+          example: 日時確定
+    Post:
+      title: 投稿
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: タイトル
+        body:
+          type: string
+          example: 本文
+        created_at:
+          type: string
+          example: "2022-01-01"
+        updated_at:
+          type: string
+          example: "2022-01-02"
+    ActivityHistory:
+      title: 活動履歴
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        category_id:
+          type: integer
+          example: 1
+        unit_price_id:
+          type: integer
+          example: 1
+        category:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 1
+            name:
+              type: string
+              example: カテゴリー
+            icon:
+              type: string
+              example: アイコン
+            color:
+              type: string
+              example: "#fffff"
+            status:
+              type: string
+              example: 承諾
+        unitPrice:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 1
+            name:
+              type: string
+              example: 廃棄物A
+            unit:
+              type: string
+              example: kg
+            price:
+              type: string
+              example: 10000
+            terms:
+              type: string
+              example: 条件
+        quantity:
+          type: integer
+          example: 1
+        collection_date:
+          type: string
+          example: "2022-12-14"
+        postal_code:
+          type: integer
+          example: 1234567
+        # データの整合性を合わせるためにuserの中にある住所と同じにする
+        prefecture:
+          type: string
+          example: 都道府県
+        municipalities:
+          type: string
+          example: 市区町村
+        building:
+          type: string
+          example: ビル・建物名
+        informative_statement:
+          type: string
+          example: 情報提供文
+    CreateActivityHistory:
+      title: 活動履歴新規作成
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        category_id:
+          type: integer
+          example: 1
+        unit_price_id:
+          type: integer
+          example: 1
+        quantity:
+          type: integer
+          example: 1
+        collection_date:
+          type: string
+          example: "2022-12-14"
+        postal_code:
+          type: integer
+          example: 1234567
+        # データの整合性を合わせるためにuserの中にある住所と同じにする
+        prefecture:
+          type: string
+          example: 都道府県
+        municipalities:
+          type: string
+          example: 市区町村
+        building:
+          type: string
+          example: ビル・建物名
+        informative_statement:
+          type: string
+          example: 情報提供文
+    UnitPrice:
+      title: 単価表
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 廃棄物名
+        unit:
+          type: string
+          example: 単位
+        price:
+          type: integer
+          example: 15000
+        terms:
+          type: string
+          example: 条件
