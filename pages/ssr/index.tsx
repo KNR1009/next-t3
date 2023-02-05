@@ -33,8 +33,8 @@ export default SSRPage;
 export const getServerSideProps: GetServerSideProps<{ posts: Post[] }> = async (
   context
 ) => {
-  console.log("SSR");
-  const res = await axios.get("http://127.0.0.1:3005/posts");
+  const res = await axios.get("http://127.0.0.1:3000/api/posts");
+  // const res = await axios.get("http://127.0.0.1:3005/posts");
   const result = await res.data;
   const posts: Post[] = result.map((i: Post) => {
     return {
